@@ -4,13 +4,6 @@ This project is a full-stack implementation of a **Vision-First Analytics System
 
 ---
 
-## 📌 System Design
-
-![alt text](screenshots/DeepPrediction-Page-1.drawio.png)
-
-![alt text](screenshots/DeepPrediction-Page-2.drawio.png)
----
-
 ## 📌 Project Intent
 
 Traditional analytics tools focus only on clicks and events. Our vision-first approach combines:
@@ -48,6 +41,11 @@ Built with **React** and **plain JS trackers**, the frontend simulates a product
 * Flushes session on inactivity or via a "Flush Now" debug button.
 * Live LLM-based insights shown in floating overlay.
 
+![Frontend Page](screenshots/Frontend-1.png)
+
+![Browsing Product](screenshots/Frontend-2.png)
+
+![Order Placed](screenshots/Frontend-3.png)
 ---
 
 ## ⚙️ Backend (FastAPI)
@@ -90,6 +88,10 @@ Upon session flush, you get:
 
 Logs are written to `session_logs.txt`.
 
+### Example Session LLM output
+```
+"1. The user appears to be browsing through the product catalog, viewing different items such as a classic white t-shirt, a black hoodie, blue jeans, sneakers and a keychain. They are likely interested in these items and are considering purchasing them, as indicated by their actions of hovering over the item details and 'Add to Cart' buttons. The user also seems to be trying to view the size chart for the items, possibly to determine their appropriate size before purchase."
+```
 ---
 
 ## 🧱 System Design
@@ -100,7 +102,9 @@ The system is structured around a shared `session_id`, allowing:
 * Modular scaling of trackers and analyzers
 * Clear separation of concerns across capture, analysis, and inference layers
 
-(Include your system design diagram here)
+![alt text](screenshots/DeepPrediction-Page-1.drawio.png)
+
+![alt text](screenshots/DeepPrediction-Page-2.drawio.png)
 
 ---
 
