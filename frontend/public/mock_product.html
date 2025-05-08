@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Product Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .product-box {
+      border: 1px solid #ddd;
+      padding: 15px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .product-box img {
+      max-width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    .hint {
+      color: gray;
+      font-size: 0.9em;
+    }
+    .cart-button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
+  <script src="cursorTracker.js" defer></script>
+</head>
+<body>
+  <div class="header">
+    <h1>Product Catalog</h1>
+    <button class="cart-button" onclick="showCart()">🛒 View Cart (<span id="cartCount">0</span>)</button>
+  </div>
+
+  <div class="product-grid" id="productGrid"></div>
+
+  <script>
+    const products = [
+      { id: 1, name: "Classic White T-Shirt", price: "$20", img: "https://c.media-amazon.com/images/I/51Y6ryllCsL._AC_SX679_.jpg", hasSizeChart: false },
+      { id: 2, name: "Black Hoodie", price: "$40", img: "https://c.media-amazon.com/images/I/61C+zURu0EL._AC_SX679_.jpg", hasSizeChart: true },
+      { id: 3, name: "Blue Jeans", price: "$60", img: "https://c.media-amazon.com/images/I/51GkgJfInTL._AC_SY879_.jpg", hasSizeChart: true },
+      { id: 4, name: "Sneakers", price: "$80", img: "https://c.media-amazon.com/images/I/61oa+rlwTiL._AC_SY695_.jpg", hasSizeChart: false },
+      { id: 5, name: "Summer Dress", price: "$45", img: "https://c.media-amazon.com/images/I/81EYjmptifL._AC_SY879_.jpg", hasSizeChart: true },
+      { id: 6, name: "Cap", price: "$15", img: "https://c.media-amazon.com/images/I/71eHXFsetiS._AC_SX679_.jpg", hasSizeChart: false },
+      { id: 7, name: "Blue Denim T-Shirt", price: "$20", img: "https://c.media-amazon.com/images/I/71nwNJMLSSL._AC_SY879_.jpg", hasSizeChart: false },
+      { id: 8, name: "Yellow Hoodie", price: "$40", img: "https://c.media-amazon.com/images/I/61VNNqXvirL._AC_SX679_.jpg", hasSizeChart: true },
+      { id: 9, name: "Black Towel", price: "$60", img: "https://c.media-amazon.com/images/I/91VyEHJ5ndL.__AC_SX300_SY300_QL70_FMwebp_.jpg", hasSizeChart: true },
+      { id: 10, name: "Sandals", price: "$80", img: "https://c.media-amazon.com/images/I/91UzoqnwFZL._AC_SY695_.jpg", hasSizeChart: false },
+      { id: 11, name: "Shorts", price: "$45", img: "https://c.media-amazon.com/images/I/51Jb15RPOfL._AC_SY879_.jpg", hasSizeChart: true },
+      { id: 12, name: "Keychain", price: "$15", img: "https://c.media-amazon.com/images/I/51GSHPQqsRL._AC_SX679_.jpg", hasSizeChart: false },
+    
+    ];
+
+    let cart = [];
+
+    document.addEventListener("DOMContentLoaded", function() {
+      showCatalog();
+    });
+
+    function showCatalog() {
+      document.body.innerHTML = `
+        <div class="header">
+          <h1>Product Catalog</h1>
+          <button class="cart-button" onclick="showCart()">🛒 View Cart (<span id="cartCount">${cart.length}</span>)</button>
+        </div>
+        <div class="product-grid" id="productGrid"></div>
+      `;
+
+      const grid = document.getElementById("productGrid");
+
+      products.forEach(product => {
+        const box = document.createElement("div");
+        box.className = "product-box";
+        box.innerHTML = `
+          <img src="${product.img}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p>${product.price}</p>
+        `;
+        box.addEventListener("click", () => showProductPage(product));
+        grid.appendChild(box);
+      });
+    }
+
+    function showProductPage(product) {
+      document.body.innerHTML = `
+        <div class="header">
+          <h1>${product.name}</h1>
+          <button class="cart-button" onclick="showCart()">🛒 View Cart (<span id="cartCount">${cart.length}</span>)</button>
+        </div>
+        <img src="${product.img}" alt="${product.name}" style="width:300px;height:auto;">
+        <p>Price: ${product.price}</p>
+        <label for="size">Select Size:</label>
+        <select id="size">
+          <option value="">Choose</option>
+          <option value="S">Small</option>
+          <option value="M">Medium</option>
+          <option value="L">Large</option>
+        </select>
+        <br><br>
+        <button onclick="addToCart(${product.id})">Add to Cart</button>
+        <button disabled>Save for Later</button>
+        ${!product.hasSizeChart ? '<div class="hint">Size chart not found</div>' : '<a href="#">View size chart</a>'}
+        <br><br>
+        <button onclick="showCatalog()">⬅️ Back to Catalog</button>
+      `;
+    }
+
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      cart.push(product);
+      alert(`${product.name} added to cart!`);
+      showCatalog();
+    }
+
+    function showCart() {
+      document.body.innerHTML = `
+        <div class="header">
+          <h1>Your Cart</h1>
+          <button class="cart-button" onclick="showCatalog()">⬅️ Back to Catalog</button>
+        </div>
+        <ul>
+          ${cart.map((item, index) => `
+            <li>
+              ${item.name} - ${item.price}
+              <button onclick="removeFromCart(${index})">Remove</button>
+            </li>
+          `).join('')}
+        </ul>
+        <br>
+        <button onclick="analyzeCart()">Place Order</button>
+      `;
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      showCart();
+    }
+
+    function analyzeCart() {
+      const removedOrUnboughtItems = products.filter(p => !cart.includes(p));
+      alert("Order Placed");
+    }
+  </script>
+</body>
+</html>
